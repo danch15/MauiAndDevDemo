@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:MauiAndDevDemo"
+             xmlns:dxc="clr-namespace:DevExpress.Maui.Controls;assembly=DevExpress.Maui.Controls"
+             xmlns:dxg="clr-namespace:DevExpress.Maui.DataGrid;assembly=DevExpress.Maui.DataGrid"
+             x:Class="MauiAndDevDemo.MainPage">
+    <!--xmlns:rotorsoft="clr-namespace:Rotorsoft.Forms"-->
+    <ContentPage.BindingContext>
+        <local:ViewModel/>
+    </ContentPage.BindingContext>
+
+    <!--<ContentPage.Resources>
+        <rotorsoft:CollectionViewSource x:Key="UserDataSource" Source="{Binding Users, Mode=OneWay}"/>
+        -->
+    <!--BindingContext="{Binding Source={RelativeSource Mode=FindAncestorBindingContext, AncestorType={x:Type local:ViewModel}}}"-->
+    <!--
+    </ContentPage.Resources>-->
+
+    <ScrollView BackgroundColor="LightGray">
+        <VerticalStackLayout 
+            Spacing="25" 
+            Padding="30,0" 
+            VerticalOptions="Center">
+            <Label BackgroundColor="Yellow" HorizontalTextAlignment="Center" Text="I don't want to show the navigation bar when I show the popup windows, How can I handle this?&#10;"/>
+
+            <dxc:DXPopup Grid.Row="0" IsOpen="{Binding IsOpenPopup}" BackgroundColor="#0078D7" AllowScrim="False" ShadowColor="#50A0E0"
+                     ShadowVerticalOffset="5" ShadowHorizontalOffset="3" VerticalAlignment="Center" HorizontalAlignment="Center" CornerRadius="20">
+                <Border Stroke="#0078D7" StrokeThickness="2" HorizontalOptions="Center" BackgroundColor="WhiteSmoke" Margin="2,2,2,3">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20" />
+                    </Border.StrokeShape>
+                    <VerticalStackLayout MaximumWidthRequest="600">
+                        <Label HorizontalOptions="Center" VerticalOptions="Center" FontSize="32" TextColor="Black" Text="Popup Title"
+                           Margin="24,30,24,14" HorizontalTextAlignment="Center" FontAttributes="Bold" MinimumWidthRequest="500"/>
+                        <BoxView Margin="24,12"/>
+                        <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Margin="10,15,10,25">
+                            <dxc:SimpleButton Text="取消" WidthRequest="160" HeightRequest="80" HorizontalOptions="Center" VerticalOptions="Center" FontSize="28" Margin="15" Command="{Binding GeneralPopupCancelCommand}"/>
+                            <dxc:SimpleButton Text="确认" WidthRequest="160" HeightRequest="80" HorizontalOptions="Center" VerticalOptions="Center" FontSize="28" Margin="15" Command="{Binding GeneralPopupAcceptCommand}"/>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+            </dxc:DXPopup>
+
+            <Button 
+                x:Name="ShowPopUp"
+                Text="ShowDevPopUp"
+                Command="{Binding ShowPopupCommand}"
+                HorizontalOptions="Center" />
+            <Label BackgroundColor="Yellow" HorizontalTextAlignment="Center" >The DataGridRowHeight is OK, but I don't see nothing. ↓↓↓ But in MAUI RC3 can see the row's data</Label>
+
+            <dxg:DataGridView ItemsSource="{Binding Users}" BackgroundColor="LightSkyBlue" RowHeight="50" ShowAutoFilterRow="True">
+                <dxg:DataGridView.CellStyle>
+                    <dxg:CellStyle Padding="5" BackgroundColor="LightSkyBlue" BorderColor="#515151"
+                                   FontSize="20" FontColor="Blue"
+                                   SelectionColor="LightSkyBlue" SelectionFontColor="Black"/>
+                </dxg:DataGridView.CellStyle>
+            </dxg:DataGridView>
+
+            <Label BackgroundColor="Yellow" HorizontalTextAlignment="Center" >Set the DataGrivView's HeightRequest="250", No problem. ↓↓↓</Label>
+
+            <dxg:DataGridView ItemsSource="{Binding Users}" BackgroundColor="LightSkyBlue" RowHeight="50" ShowAutoFilterRow="True" HeightRequest="250">
+                <dxg:DataGridView.CellStyle>
+                    <dxg:CellStyle Padding="5" BackgroundColor="LightSkyBlue" BorderColor="#515151"
+                                   FontSize="20" FontColor="White"
+                                   SelectionColor="LightSkyBlue" SelectionFontColor="Black"/>
+                </dxg:DataGridView.CellStyle>
+            </dxg:DataGridView>
+
+            <Label BackgroundColor="Yellow" HorizontalTextAlignment="Center" Text="The DevExpress DXCollectionView not supported the GridItemsLayout, By CollectionView Can"/>
+
+            <CollectionView x:Name="collectionView" SelectionMode="Single" SelectedItem="{Binding CurrentUser}"
+                            ItemsSource="{Binding UserCollectionViewSource.View}"
+                            BackgroundColor="LightSkyBlue">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" Span="5"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Image Grid.RowSpan="2"
+                       Source="{Binding UserID}"
+                       Aspect="AspectFill"
+                       HeightRequest="60"
+                       WidthRequest="60" />
+                            <Label Grid.Column="1"
+                       Text="{Binding UserName}"
+                       FontAttributes="Bold" />
+                            <Label Grid.Row="1"
+                       Grid.Column="1"
+                       Text="{Binding UserNumber}"
+                       FontAttributes="Italic"
+                       VerticalOptions="End" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <HorizontalStackLayout>
+                <Button Text="AddItem" Command="{Binding AddItemCommand}" Margin="2" BackgroundColor="Green"></Button>
+                <Button Text="DeleteItem" Command="{Binding DeleteItemCommand}" Margin="2" BackgroundColor="Red"
+                        CommandParameter="{Binding CurrentUser}"/>
+                <!--CommandParameter="{Binding Source={Reference collectionView}, Path=SelectedItem}"/>-->
+                <Label Text="{Binding CurrentUser}"></Label>
+            </HorizontalStackLayout>
+
+            <Grid BackgroundColor="Gray">
+                <Border Stroke="Red" StrokeThickness="15" HorizontalOptions="Center" BackgroundColor="Red">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="15" />
+                    </Border.StrokeShape>
+                    <Border Stroke="Blue" StrokeThickness="15" Background="DeepSkyBlue">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="15"/>
+                        </Border.StrokeShape>
+                        <Grid HeightRequest="80">
+                            <VerticalStackLayout VerticalOptions="Center" BackgroundColor="YellowGreen">
+                                <Label FontSize="30" Text="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" VerticalOptions="Center" TextColor="Red" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+                </Border>
+            </Grid>
+
+            <Image
+                Source="dotnet_bot.png"
+                SemanticProperties.Description="Cute dot net bot waving hi to you!"
+                HeightRequest="200"
+                HorizontalOptions="Center" />
+
+            <Label 
+                Text="Hello, World!"
+                SemanticProperties.HeadingLevel="Level1"
+                FontSize="32"
+                HorizontalOptions="Center" />
+
+            <Label 
+                Text="Welcome to .NET Multi-platform App UI"
+                SemanticProperties.HeadingLevel="Level2"
+                SemanticProperties.Description="Welcome to dot net Multi platform App U I"
+                FontSize="18"
+                HorizontalOptions="Center" />
+
+            <Button 
+                x:Name="CounterBtn"
+                Text="Click me"
+                SemanticProperties.Hint="Counts the number of times you click"
+                Clicked="OnCounterClicked"
+                HorizontalOptions="Center" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

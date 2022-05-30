@@ -3,3 +3,5 @@
 ################################################################################
 
 /.vs
+/MauiAndDevDemo/obj
+/MauiAndDevDemo/bin/Debug/net6.0-android
