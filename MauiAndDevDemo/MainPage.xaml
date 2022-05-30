@@ -81,24 +81,11 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <Image Grid.RowSpan="2"
-                       Source="{Binding UserID}"
-                       Aspect="AspectFill"
-                       HeightRequest="60"
-                       WidthRequest="60" />
-                            <Label Grid.Column="1"
-                       Text="{Binding UserName}"
-                       FontAttributes="Bold" />
-                            <Label Grid.Row="1"
-                       Grid.Column="1"
-                       Text="{Binding UserNumber}"
-                       FontAttributes="Italic"
-                       VerticalOptions="End" />
+                            <Label Grid.Row="0" Text="{Binding UserID}" />
+                            <Label Grid.Row="1" Text="{Binding UserNumber}" FontAttributes="Italic" VerticalOptions="End" />
+                            <Label Grid.Row="2" Text="{Binding UserName}" FontAttributes="Bold" />
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
@@ -109,9 +96,13 @@
                 <Button Text="DeleteItem" Command="{Binding DeleteItemCommand}" Margin="2" BackgroundColor="Red"
                         CommandParameter="{Binding CurrentUser}"/>
                 <!--CommandParameter="{Binding Source={Reference collectionView}, Path=SelectedItem}"/>-->
+                <Button Text="Step 1. ModifyItem" Command="{Binding ModifyItemCommand}" Margin="2" CommandParameter="{Binding CurrentUser}"/>
+                <Button Text="Step 2. Refresh" Command="{Binding RefreshCommand}" Margin="2"/>
                 <Label Text="{Binding CurrentUser}"></Label>
             </HorizontalStackLayout>
 
+            <Label BackgroundColor="Yellow" HorizontalTextAlignment="Center" Text="↑↑↑I modify the UserName, but it's not auto refresh the date."/>
+            
             <Grid BackgroundColor="Gray">
                 <Border Stroke="Red" StrokeThickness="15" HorizontalOptions="Center" BackgroundColor="Red">
                     <Border.StrokeShape>

@@ -34,6 +34,9 @@ public class ViewModel : INotifyPropertyChanged
 
     public ICommand AddItemCommand { get; set; }
     public ICommand DeleteItemCommand { get; set; }
+    public ICommand ModifyItemCommand { get; set; }
+    
+    public ICommand RefreshCommand { get; set; }
 
     public event PropertyChangedEventHandler PropertyChanged;
     protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -70,6 +73,8 @@ public class ViewModel : INotifyPropertyChanged
         ShowPopupCommand = new Command(OnShowPopup);
         AddItemCommand = new Command<object>(OnAddItem);
         DeleteItemCommand = new Command<object>(OnDeleteItem, CanDeleteItem);
+        ModifyItemCommand = new Command<object>(OnModifyItem);
+        RefreshCommand = new Command<object>(OnRefresh);
 
         for (; i < 10; i++)
         {
@@ -120,5 +125,18 @@ public class ViewModel : INotifyPropertyChanged
     private bool CanDeleteItem(object arg)
     {
         return arg is User user;
+    }
+
+    private void OnRefresh(object obj)
+    {
+        UserCollectionViewSource.View.Refresh();
+    }
+
+    private void OnModifyItem(object obj)
+    {
+        if (obj is User user)
+        {
+            user.UserName = DateTime.Now.ToString();
+        }
     }
 }
